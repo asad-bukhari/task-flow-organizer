@@ -1,22 +1,48 @@
-# Task Management API
+# Task Management System
 
-A production-ready task management REST API built with FastAPI, SQLModel, and Neon PostgreSQL featuring rate limiting, security headers, and comprehensive test coverage.
+A full-stack task management application with a production-ready REST API backend and a modern React frontend.
 
 ## ✨ Features
 
-### Core Functionality
+### Backend (FastAPI)
 - ✅ Create, read, update, and delete tasks
 - 📖 Pagination support for large datasets
 - 🔍 Filter tasks by status and priority
 - 📊 Task statistics endpoint
 - 🚀 Full async/await for high performance
-
-### Security & Performance
 - 🔒 Comprehensive security headers
 - 🛡️ Rate limiting on all endpoints
 - 🌐 Configurable CORS policies
-- ⚡ Async database operations
 - ✅ 55 tests with full coverage
+
+### Frontend (React + Vite)
+- 🎨 Modern UI built with shadcn/ui components
+- 📱 Responsive design with Tailwind CSS
+- ⚡ Real-time data fetching with TanStack Query
+- 🔄 Optimistic updates for better UX
+- 🔍 Search and filter tasks
+- 📊 Statistics dashboard
+- 🌙 Dark mode support
+- 🎯 Create, edit, and delete tasks with modal dialogs
+
+## 🏗️ Tech Stack
+
+### Backend
+- **FastAPI 0.115.0**: Modern web framework
+- **SQLModel 0.0.22**: ORM (Pydantic + SQLAlchemy)
+- **Neon PostgreSQL**: Serverless PostgreSQL database
+- **asyncpg**: Async PostgreSQL driver
+- **slowapi**: Rate limiting
+- **pytest**: Testing framework
+
+### Frontend
+- **Vite 5.4.19**: Build tool and dev server
+- **React 18**: UI library
+- **TypeScript**: Type-safe development
+- **shadcn/ui**: High-quality React components
+- **Tailwind CSS 3.4**: Utility-first styling
+- **TanStack Query 5.83**: Data fetching and caching
+- **React Router 6.30**: Client-side routing
 
 ## 📋 Task Fields
 
@@ -94,29 +120,28 @@ task-managment/
 
 ### Prerequisites
 
+**Backend:**
 - Python 3.12+
 - Neon PostgreSQL database (get free account at https://neon.tech)
 - uv package manager (recommended) or pip
+
+**Frontend:**
+- Node.js 18+ and npm
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd task-managment
+   git clone https://github.com/asad-bukhari/task-flow-organizer.git
+   cd task-flow-organizer
    ```
 
-2. **Install dependencies**
+2. **Backend Setup**
    ```bash
-   # Using uv (recommended)
+   # Install backend dependencies
    uv sync
 
-   # Or using pip
-   pip install -e .
-   ```
-
-3. **Configure environment**
-   ```bash
+   # Configure environment
    cp .env.example .env
    ```
 
@@ -125,20 +150,27 @@ task-managment/
    DATABASE_URL=postgresql://username:password@ep-xyz.region.aws.neon.tech/neondb
    ```
 
-4. **Run the application**
+   Start the backend server:
    ```bash
-   # Using uvicorn with hot reload
    uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-
-   # Or using the entry point
-   python main.py
    ```
 
-5. **Access the API**
-   - API: http://localhost:8000
-   - Interactive docs (Swagger): http://localhost:8000/docs
-   - Alternative docs (ReDoc): http://localhost:8000/redoc
-   - Health check: http://localhost:8000/health
+3. **Frontend Setup**
+   ```bash
+   # Install frontend dependencies
+   cd frontend
+   npm install
+
+   # Start the frontend server
+   npm run dev
+   ```
+
+4. **Access the Application**
+   - **Frontend**: http://localhost:8080
+   - **Backend API**: http://localhost:8000
+   - **API Docs (Swagger)**: http://localhost:8000/docs
+   - **API Docs (ReDoc)**: http://localhost:8000/redoc
+   - **Health Check**: http://localhost:8000/health
 
 ## 🧪 Testing
 

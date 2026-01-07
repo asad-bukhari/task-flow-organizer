@@ -4,7 +4,7 @@ This document provides context and guidelines for Claude AI to assist with devel
 
 ## Project Overview
 
-**Tech Stack:**
+**Backend Tech Stack:**
 - **Framework**: FastAPI 0.115.0
 - **Database**: Neon PostgreSQL (Serverless)
 - **ORM**: SQLModel (built on Pydantic + SQLAlchemy)
@@ -13,13 +13,21 @@ This document provides context and guidelines for Claude AI to assist with devel
 - **Testing**: pytest + pytest-asyncio + httpx
 - **Package Manager**: uv
 
+**Frontend Tech Stack:**
+- **Framework**: Vite 5.4.19 + React 18 + TypeScript
+- **UI Library**: shadcn/ui (Radix UI primitives)
+- **Styling**: Tailwind CSS 3.4.17
+- **Data Fetching**: TanStack Query 5.83.0
+- **Routing**: React Router DOM 6.30.1
+- **Package Manager**: npm
+
 **Architecture Pattern**: Repository + Service Layer with Async/Throughout
 
 ## Project Structure
 
 ```
 task-managment/
-├── app/
+├── app/                              # Backend API
 │   ├── api/
 │   │   └── v1/
 │   │       ├── endpoints/
@@ -36,14 +44,41 @@ task-managment/
 │   ├── services/
 │   │   └── task_service.py           # Business logic layer
 │   └── main.py                       # FastAPI app instance
+├── frontend/                         # Vite + React + TypeScript frontend
+│   ├── src/
+│   │   ├── components/               # React components
+│   │   │   ├── ui/                   # shadcn/ui components
+│   │   │   ├── Header.tsx            # App header component
+│   │   │   ├── TaskCard.tsx          # Task display card
+│   │   │   ├── TaskList.tsx          # Task list container
+│   │   │   ├── TaskForm.tsx          # Create/edit form
+│   │   │   ├── TaskStats.tsx         # Statistics dashboard
+│   │   │   └── TaskFilters.tsx       # Filter controls
+│   │   ├── hooks/
+│   │   │   └── useTasks.ts           # Task data fetching hook
+│   │   ├── lib/
+│   │   │   ├── api.ts                # API service layer
+│   │   │   └── utils.ts              # Utility functions
+│   │   ├── pages/
+│   │   │   └── Index.tsx             # Main page
+│   │   ├── types/
+│   │   │   └── task.ts               # TypeScript types
+│   │   ├── App.tsx                   # Root component
+│   │   └── main.tsx                  # Entry point
+│   ├── index.html                    # HTML template
+│   ├── package.json                  # Frontend dependencies
+│   ├── vite.config.ts                # Vite configuration
+│   └── tailwind.config.ts            # Tailwind configuration
 ├── tests/
 │   ├── conftest.py                   # Pytest fixtures
 │   ├── test_tasks.py                 # CRUD tests
 │   ├── test_security.py              # Security tests
 │   └── test_rate_limiting.py         # Rate limiting tests
 ├── .env                              # Environment variables (gitignored)
-├── pyproject.toml                    # Dependencies & project config
-└── main.py                           # Application entry point
+├── .env.example                      # Example environment file
+├── pyproject.toml                    # Backend dependencies
+├── CLAUDE.md                         # This file
+└── README.md                         # Project documentation
 ```
 
 ## Key Implementation Details
@@ -209,11 +244,20 @@ DATABASE_URL=postgresql://user:pass@ep-xyz.region.aws.neon.tech/dbname
 
 ## Development Workflow
 
+### Backend Development
 1. **Install dependencies**: `uv sync`
 2. **Configure environment**: Copy `.env.example` to `.env`, add DATABASE_URL
-3. **Run development server**: `uv run uvicorn app.main:app --reload`
+3. **Run development server**: `uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000`
 4. **Run tests**: `uv run pytest tests/ -v`
 5. **Check API docs**: http://localhost:8000/docs
+
+### Frontend Development
+1. **Install dependencies**: `cd frontend && npm install`
+2. **Start dev server**: `npm run dev` (runs on http://localhost:8080)
+3. **Build for production**: `npm run build`
+4. **Preview production build**: `npm run preview`
+
+**Note**: Frontend requires backend to be running on http://localhost:8000
 
 ## Code Style Guidelines
 

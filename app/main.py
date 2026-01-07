@@ -33,14 +33,41 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response = await call_next(request)
 
-        # Security headers
-        response.headers["X-Content-Type-Options"] = "nosniff"
-        response.headers["X-Frame-Options"] = "DENY"
-        response.headers["X-XSS-Protection"] = "1; mode=block"
-        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
-        response.headers["Content-Security-Policy"] = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'"
-        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
-        response.headers["Permissions-Policy"] = "geolocation=(), microphone=()"
+        # Don't override CORS headers
+        cors_headers = [
+            "access-control-allow-origin",
+            "access-control-allow-methods",
+            "access-control-allow-headers",
+            "access-control-allow-credentials",
+            "access-control-expose-headers",
+            "access-control-max-age",
+        ]
+
+        # Security headers (only if not already set by CORS)
+        if "X-Content-Type-Options" not in response.headers:
+            response.headers["X-Content-Type-Options"] = "nosniff"
+        if "X-Frame-Options" not in response.headers:
+            response.headers["X-Frame-Options"] = "DENY"
+        if "X-XSS-Protection" not in response.headers:
+            response.headers["X-XSS-Protection"] = "1; mode=block"
+        if "Strict-Transport-Security" not in response.headers:
+            response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
+
+        # Allow CDN resources for Swagger UI (/docs and /redoc) and API calls from frontend
+        # Only set CSP if not already present
+        if "Content-Security-Policy" not in response.headers:
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; "
+                "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; "
+                "img-src 'self' data: https://fastapi.tiangolo.com; "
+                "connect-src 'self' http://localhost:* http://127.0.0.1:*"
+            )
+
+        if "Referrer-Policy" not in response.headers:
+            response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        if "Permissions-Policy" not in response.headers:
+            response.headers["Permissions-Policy"] = "geolocation=(), microphone=()"
 
         return response
 
@@ -57,10 +84,7 @@ app = FastAPI(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-# Add security headers middleware (must be before CORS)
-app.add_middleware(SecurityHeadersMiddleware)
-
-# Configure CORS - More restrictive for production
+# Configure CORS - Must be FIRST in middleware stack (added last)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.BACKEND_CORS_ORIGINS,
@@ -77,6 +101,9 @@ app.add_middleware(
     ],
     max_age=settings.CORS_MAX_AGE,
 )
+
+# Add security headers middleware (must be AFTER CORS)
+app.add_middleware(SecurityHeadersMiddleware)
 
 # Include API router
 app.include_router(api_router, prefix=settings.API_V1_STR)

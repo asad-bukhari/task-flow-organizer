@@ -59,3 +59,12 @@ dmypy.json
 
 # Ruff
 .ruff_cache/
+
+# Temporary setup scripts
+push-https.sh
+push-to-github.sh
+push-with-ssh.py
+setup-and-push.sh
+
+# Frontend backup
+frontend-brutalist-backup/

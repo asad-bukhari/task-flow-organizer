@@ -16,10 +16,12 @@ class Settings(BaseSettings):
     # CORS - Production settings
     # In production, set specific origins in .env file
     BACKEND_CORS_ORIGINS: list[str] = [
-        "http://localhost:3000",   # React dev server
+        "http://localhost:3000",   # Next.js dev server
         "http://localhost:8000",   # FastAPI dev server
+        "http://localhost:8080",   # Vite dev server
         "http://127.0.0.1:3000",
         "http://127.0.0.1:8000",
+        "http://127.0.0.1:8080",
     ]
 
     # Security
