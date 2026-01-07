@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="#3b82f6"/>
+  <!-- Clipboard -->
+  <rect x="8" y="4" width="16" height="24" rx="2" fill="white" opacity="0.9"/>
+  <rect x="12" y="2" width="8" height="4" rx="1" fill="#1e40af"/>
+  <!-- Checkmarks -->
+  <path d="M11 12 L13 14 L17 10" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M11 18 L13 20 L17 16" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="22" cy="8" r="8" fill="#10b981"/>
+  <path d="M19 8 L21 10 L25 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
